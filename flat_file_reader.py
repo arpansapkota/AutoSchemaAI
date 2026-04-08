@@ -60,23 +60,14 @@ def load_api_key(path: str) -> str:
 
 #From Streamlit.io
 def get_groq_api_key():
-    # 1) Try Streamlit secrets (share.streamlit.io)
-    key = None
-    try:
-        key = st.secrets.get("GROQ_API_KEY") or (st.secrets.get("groq") or {}).get("api_key")
-    except Exception:
-        key = None
-
-    # 2) Fallback to environment variable
-    if not key:
-        key = os.environ.get("GROQ_API_KEY")
-
-    # 3) Fail fast with helpful message
+    # Try Streamlit secrets (share.streamlit.io)
+    key = st.secrets.get("GROQ_API_KEY")
+    #  Fail fast with helpful message
     if not key:
         st.error("GROQ_API_KEY not found. Add it in Streamlit Secrets (Settings → Secrets) or set the environment variable.")
         st.stop()
 
-    # 4) Sanitize, sanity check, and display masked
+    # Sanitize, sanity check, and display masked
     key = key.strip().strip('"').strip("'")
     if not key.startswith("gsk_"):
         st.warning("GROQ_API_KEY does not start with expected prefix; verify the secret value in Streamlit Secrets.")
@@ -96,8 +87,8 @@ GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 # ──────────────────────────────────────────────────────────────────────────────
 # Page config
 # ──────────────────────────────────────────────────────────────────────────────
-st.set_page_config(page_title="Flat File Reader", page_icon="📂", layout="wide")
-st.title("📂 Flat File Reader")
+st.set_page_config(page_title="AutoSchemaAI", page_icon="📂", layout="wide")
+st.title("📂 AutoSchemaAI")
 st.caption("Upload a `.csv` or `.txt` file to explore its contents.")
 
 # ──────────────────────────────────────────────────────────────────────────────
