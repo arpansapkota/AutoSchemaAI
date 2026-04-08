@@ -75,6 +75,9 @@ def get_groq_api_key():
     masked = key[:4] + "..." + key[-4:]
     st.caption(f"GROQ_API_KEY (masked): {masked}")
 
+    st.write("Secrets:", st.secrets)
+    st.write("Key length:", len(GROQ_API_KEY))
+
     return key
 
 
