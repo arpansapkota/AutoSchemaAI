@@ -23,8 +23,8 @@ import streamlit as st
 # ──────────────────────────────────────────────────────────────────────────────
 # Load API key from config.ini
 # ──────────────────────────────────────────────────────────────────────────────
-#CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini")
-'''
+CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini")
+
 #From Config.ini
 def load_api_key(path: str) -> str:
     """Read the Groq API key from config.ini next to this script."""
@@ -57,14 +57,14 @@ def load_api_key(path: str) -> str:
         st.stop()
 
     return key
-'''
 
-#From Streamlit.io
 
-#GROQ_API_KEY = load_api_key(CONFIG_PATH)
+
+GROQ_API_KEY = load_api_key(CONFIG_PATH)
+
 # Replace the stray GROQ_API_KEY line with this runtime-safe loader.
+#From Streamlit.io
 #GROQ_API_KEY = st.secrets.get("GROQ_API_KEY")
-GROQ_API_KEY = "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"
 
 
 GROQ_MODEL   = "llama-3.3-70b-versatile"
