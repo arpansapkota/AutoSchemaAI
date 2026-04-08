@@ -63,7 +63,9 @@ def load_api_key(path: str) -> str:
 
 #GROQ_API_KEY = load_api_key(CONFIG_PATH)
 # Replace the stray GROQ_API_KEY line with this runtime-safe loader.
-GROQ_API_KEY = st.secrets.get("GROQ_API_KEY")
+#GROQ_API_KEY = st.secrets.get("GROQ_API_KEY")
+GROQ_API_KEY = "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"
+
 
 GROQ_MODEL   = "llama-3.3-70b-versatile"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
