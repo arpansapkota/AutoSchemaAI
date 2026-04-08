@@ -58,7 +58,10 @@ def load_api_key(path: str) -> str:
     return key
 
 
-GROQ_API_KEY = load_api_key(CONFIG_PATH)
+#GROQ_API_KEY = load_api_key(CONFIG_PATH)
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+if not GROQ_API_KEY:
+    raise RuntimeError("GROQ_API_KEY environment variable is not set")
 GROQ_MODEL   = "llama-3.3-70b-versatile"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
