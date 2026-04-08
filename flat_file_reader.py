@@ -60,30 +60,10 @@ def load_api_key(path: str) -> str:
 '''
 
 #From Streamlit.io
-def get_groq_api_key():
-    # Try Streamlit secrets (share.streamlit.io)
-    key = st.secrets.get("GROQ_API_KEY")
-    #  Fail fast with helpful message
-    if not key:
-        st.error("GROQ_API_KEY not found. Add it in Streamlit Secrets (Settings → Secrets) or set the environment variable.")
-        st.stop()
-
-    # Sanitize, sanity check, and display masked
-    key = key.strip().strip('"').strip("'")
-    if not key.startswith("gsk_"):
-        st.warning("GROQ_API_KEY does not start with expected prefix; verify the secret value in Streamlit Secrets.")
-    masked = key[:4] + "..." + key[-4:]
-    st.caption(f"GROQ_API_KEY (masked): {masked}")
-
-    st.write("Secrets:", st.secrets)
-    st.write("Key length:", len(GROQ_API_KEY))
-
-    return key
-
 
 #GROQ_API_KEY = load_api_key(CONFIG_PATH)
 # Replace the stray GROQ_API_KEY line with this runtime-safe loader.
-GROQ_API_KEY = get_groq_api_key()
+GROQ_API_KEY = st.secrets.get("GROQ_API_KEY")
 
 GROQ_MODEL   = "llama-3.3-70b-versatile"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
