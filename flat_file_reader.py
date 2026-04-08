@@ -25,6 +25,7 @@ import streamlit as st
 # ──────────────────────────────────────────────────────────────────────────────
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini")
 
+#From Config.ini
 def load_api_key(path: str) -> str:
     """Read the Groq API key from config.ini next to this script."""
     if not os.path.exists(path):
@@ -57,32 +58,37 @@ def load_api_key(path: str) -> str:
 
     return key
 
+#From Streamlit.io
+def get_groq_api_key():
+    # 1) Try Streamlit secrets (share.streamlit.io)
+    key = None
+    try:
+        key = st.secrets.get("GROQ_API_KEY") or (st.secrets.get("groq") or {}).get("api_key")
+    except Exception:
+        key = None
+
+    # 2) Fallback to environment variable
+    if not key:
+        key = os.environ.get("GROQ_API_KEY")
+
+    # 3) Fail fast with helpful message
+    if not key:
+        st.error("GROQ_API_KEY not found. Add it in Streamlit Secrets (Settings → Secrets) or set the environment variable.")
+        st.stop()
+
+    # 4) Sanitize, sanity check, and display masked
+    key = key.strip().strip('"').strip("'")
+    if not key.startswith("gsk_"):
+        st.warning("GROQ_API_KEY does not start with expected prefix; verify the secret value in Streamlit Secrets.")
+    masked = key[:4] + "..." + key[-4:]
+    st.caption(f"GROQ_API_KEY (masked): {masked}")
+
+    return key
+
 
 #GROQ_API_KEY = load_api_key(CONFIG_PATH)
 # Replace the stray GROQ_API_KEY line with this runtime-safe loader.
-GROQ_API_KEY = None
-# Try Streamlit secrets first (share.streamlit.io)
-try:
-    GROQ_API_KEY = st.secrets.get("GROQ_API_KEY") or (st.secrets.get("groq") or {}).get("api_key")
-except Exception:
-    GROQ_API_KEY = None
-
-# Fallback to environment variable
-if not GROQ_API_KEY:
-    GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-
-if not GROQ_API_KEY:
-    st.error("GROQ_API_KEY not found. Add it in Streamlit Secrets (Settings → Secrets) or set the environment variable.")
-    st.stop()
-
-# Sanitize accidental quotes/newlines
-GROQ_API_KEY = GROQ_API_KEY.strip().strip('"').strip("'")
-
-# Optional sanity check and masked display
-if not GROQ_API_KEY.startswith("gsk_"):
-    st.warning("GROQ_API_KEY does not start with expected prefix; verify the secret value in Streamlit Secrets.")
-masked = GROQ_API_KEY[:4] + "..." + GROQ_API_KEY[-4:]
-st.caption(f"GROQ_API_KEY (masked): {masked}")
+GROQ_API_KEY = get_groq_api_key()
 
 GROQ_MODEL   = "llama-3.3-70b-versatile"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
