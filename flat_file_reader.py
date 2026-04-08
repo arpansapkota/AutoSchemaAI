@@ -23,8 +23,8 @@ import streamlit as st
 # ──────────────────────────────────────────────────────────────────────────────
 # Load API key from config.ini
 # ──────────────────────────────────────────────────────────────────────────────
-CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini")
-
+#CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.ini")
+'''
 #From Config.ini
 def load_api_key(path: str) -> str:
     """Read the Groq API key from config.ini next to this script."""
@@ -57,6 +57,7 @@ def load_api_key(path: str) -> str:
         st.stop()
 
     return key
+'''
 
 #From Streamlit.io
 def get_groq_api_key():
