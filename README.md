@@ -1,4 +1,4 @@
-# 📂 AutoSchemaAI - Flat File Reader & Schema Profiler
+# 🧾 AutoSchemaAI - Flat File Reader & Schema Profiler
 
 A powerful **Streamlit-based web application** for exploring, profiling, and analyzing flat files (CSV/TXT) with intelligent schema detection using AI agents, code-based detection, and manual entry modes.
 
@@ -16,11 +16,11 @@ Perfect for data engineers, ETL developers, and data analysts working with legac
 ## ✨ Key Features
 
 ### 🔍 Smart File Parsing
-- ✅ Auto-detects delimiters (`,`, `;`, `\t`, `|`, space)
-- ✅ Detects encoding (UTF-8, Latin-1, UTF-16)
-- ✅ Recognizes line endings (LF, CRLF, CR)
-- ✅ Identifies headers automatically
-- ✅ Supports CSV and TXT files
+- Auto-detects delimiters (`,`, `;`, `\t`, `|`, space)
+- Detects encoding (UTF-8, Latin-1, UTF-16)
+- Recognizes line endings (LF, CRLF, CR)
+- Identifies headers automatically
+- Supports CSV and TXT files
 
 ### 📊 Three Profiling Modes
 
@@ -552,6 +552,6 @@ Future enhancements:
 
 ---
 
-**Made with ❤️ by AutoSchemaAI Team**
+**Made with ❤️ by Infinite Hackathon H1 2026 - Cotiviti EDM RCA Retail AutoSchemaAI Team**
 
 Last Updated: April 7, 2026
