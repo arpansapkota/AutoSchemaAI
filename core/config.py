@@ -57,4 +57,6 @@ def load_api_key(path: str = CONFIG_PATH) -> str:
 
 
 # Load once at import time — all modules use this value
-GROQ_API_KEY: str = load_api_key()
+#GROQ_API_KEY: str = load_api_key()
+#From Streamlit.io
+GROQ_API_KEY = st.secrets.get("GROQ_API_KEY")
