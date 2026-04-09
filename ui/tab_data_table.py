@@ -20,10 +20,10 @@ def render(df: pd.DataFrame, raw_bytes: bytes, sep: str, file_name: str) -> None
 
     # ── Summary metrics ────────────────────────────────────────────────────────
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Total rows",  f"{len(df):,}")
-    c2.metric("Columns",     len(df.columns))
-    c3.metric("File size",   f"{len(raw_bytes)/1024:.1f} KB")
-    c4.metric("Delimiter",   fd_label)
+    c1.metric("Total rows", f"{len(df):,}")
+    c2.metric("Columns", len(df.columns))
+    c3.metric("File size", f"{len(raw_bytes)/1024:.1f} KB")
+    c4.metric("Delimiter", fd_label)
 
     st.divider()
 
@@ -41,8 +41,8 @@ def render(df: pd.DataFrame, raw_bytes: bytes, sep: str, file_name: str) -> None
     top_n = vc2.number_input(
         "Number of rows to display",
         min_value=1,
-        max_value=len(df),
-        value=min(10, len(df)),
+        max_value=max(len(df), 1),
+        value=min(10, max(len(df), 1)),
         step=1,
         key="dt_top_n",
     )
@@ -55,42 +55,44 @@ def render(df: pd.DataFrame, raw_bytes: bytes, sep: str, file_name: str) -> None
     )
 
     # ── Column selector ────────────────────────────────────────────────────────
-    with st.expander("Choose columns to display", expanded=False):
-        sel = st.multiselect(
-            "Columns",
-            options=list(df.columns),
-            default=list(df.columns),
-            key="dt_col_select",
-        )
-        if sel:
-            view_df = df[sel]
-        else:
-            view_df = df
-    if not sel:
-        view_df = df
+    selected_cols = st.multiselect(
+        "Show columns",
+        options=list(df.columns),
+        default=list(df.columns),
+        key="dt_columns",
+    )
 
-    # ── Apply search ───────────────────────────────────────────────────────────
-    if search:
-        mask = view_df.apply(
-            lambda col: col.astype(str).str.contains(search, case=False, na=False)
+    if not selected_cols:
+        st.warning("Select at least one column to display.")
+        return
+
+    # ── Filter rows ────────────────────────────────────────────────────────────
+    view_df = df[selected_cols].copy()
+
+    if search.strip():
+        mask = view_df.astype(str).apply(
+            lambda col: col.str.contains(search, case=False, na=False)
         ).any(axis=1)
         view_df = view_df[mask]
 
-    # ── Apply start-row + top-n ────────────────────────────────────────────────
-    sliced = view_df.iloc[int(start_row): int(start_row) + int(top_n)]
+    # ── Slice rows ─────────────────────────────────────────────────────────────
+    sliced = view_df.iloc[start_row:start_row + top_n]
 
     st.caption(
-        f"Showing rows {int(start_row) + 1}–{int(start_row) + len(sliced):,} "
-        f"of {len(view_df):,} {'matching ' if search else ''}rows"
+        f"Showing {len(sliced):,} row(s)"
+        + (f" from filtered result of {len(view_df):,}" if len(view_df) != len(df) else "")
     )
 
-    st.dataframe(sliced, use_container_width=True, height=460)
+    st.dataframe(sliced, width="stretch", hide_index=True)
 
-    # ── Download ───────────────────────────────────────────────────────────────
-    csv_out = sliced.to_csv(index=False).encode("utf-8")
+    # ── Download current view ──────────────────────────────────────────────────
+    csv_bytes = sliced.to_csv(index=False).encode("utf-8")
+    file_stub = file_name.rsplit(".", 1)[0] if "." in file_name else file_name
+
     st.download_button(
         "⬇️ Download current view as CSV",
-        data=csv_out,
-        file_name=f"{file_name.rsplit('.', 1)[0]}_view.csv",
+        data=csv_bytes,
+        file_name=f"{file_stub}_view.csv",
         mime="text/csv",
+        key=f"download_current_view_{file_stub}",
     )
