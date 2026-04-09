@@ -33,12 +33,12 @@ if "streamlit" not in sys.modules or not hasattr(st, "_is_running_with_streamlit
     except:
         pass
 
-st.set_page_config(page_title="AutoSchemaAI", page_icon="📂", layout="wide")
+st.set_page_config(page_title="AutoSchemaAI", page_icon="🧾", layout="wide")
 
 from core.file_parser import parse_flat_file
 from ui import tab_data_table, tab_profiling, tab_edit_export
 
-st.title("📂 AutoSchemaAI")
+st.title("🧾 AutoSchemaAI")
 st.caption("Upload a `.csv` or `.txt` file to explore, profile and export its contents.")
 
 # ── File upload ────────────────────────────────────────────────────────────────
